@@ -5,466 +5,706 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Smile Financial · AI Funding Consultant Pro</title>
   <style>
+    /* ===== RESET & BASE ===== */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
-
-    body {
-      background: #f4f7fc;
-      color: #0b1a2f;
-      padding: 16px 12px 80px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* premium fintech palette */
     :root {
-      --primary: #0057b3;
-      --primary-light: #e6f0ff;
-      --primary-dark: #003d7a;
-      --accent: #00a67e;
-      --gray-1: #f8faff;
-      --gray-2: #e9edf4;
+      --primary: #0a4b7a;
+      --primary-light: #e8f0fe;
+      --primary-dark: #063154;
+      --accent: #0f7b3a;
+      --accent-light: #e6f5ec;
+      --gray-0: #f8fafc;
+      --gray-1: #f1f4f9;
+      --gray-2: #e2e8f0;
       --gray-3: #cbd5e1;
       --gray-4: #94a3b8;
       --gray-5: #475569;
-      --shadow: 0 8px 24px rgba(0, 20, 40, 0.06);
-      --radius: 24px;
-      --radius-sm: 16px;
+      --gray-6: #1e293b;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
+      --radius-sm: 12px;
+      --radius-md: 18px;
+      --radius-lg: 24px;
+      --radius-xl: 28px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --bottom-nav-height: 72px;
+      --header-height: 60px;
+      --sidebar-width: 280px;
     }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--gray-0);
+      color: var(--gray-6);
+      padding: 0;
+      padding-bottom: calc(var(--bottom-nav-height) + 12px);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+    a, button, input, select, textarea { font-family: inherit; }
+    button { cursor: pointer; border: none; background: none; }
+    img { max-width: 100%; display: block; }
 
-    /* main container */
-    .app-container {
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--gray-3); border-radius: 8px; }
+
+    /* ===== APP SHELL ===== */
+    .app {
       max-width: 480px;
       margin: 0 auto;
-      width: 100%;
+      padding: 0 14px 12px;
+      position: relative;
+    }
+    @media (min-width: 768px) {
+      .app { max-width: 960px; padding: 0 24px 12px; }
+    }
+    @media (min-width: 1200px) {
+      .app { max-width: 1200px; }
     }
 
-    /* header */
-    .brand {
+    /* ===== HEADER ===== */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--header-height);
+      padding: 8px 0;
+      position: sticky;
+      top: 0;
+      background: var(--gray-0);
+      z-index: 50;
+      border-bottom: 1px solid var(--gray-2);
+      margin-bottom: 14px;
+    }
+    .app-header .brand {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 8px 0 16px;
     }
-    .brand-icon {
+    .app-header .brand-icon {
+      width: 40px;
+      height: 40px;
       background: var(--primary);
-      width: 44px;
-      height: 44px;
-      border-radius: 16px;
+      border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-weight: 600;
-      font-size: 22px;
-      box-shadow: 0 4px 8px rgba(0,87,179,0.15);
-    }
-    .brand h1 {
+      color: #fff;
+      font-weight: 700;
       font-size: 20px;
+      flex-shrink: 0;
+    }
+    .app-header .brand h1 {
+      font-size: 18px;
       font-weight: 600;
       letter-spacing: -0.3px;
-      color: #0b1a2f;
+      color: var(--gray-6);
+      line-height: 1.2;
     }
-    .brand small {
-      font-size: 13px;
+    .app-header .brand small {
+      display: block;
+      font-size: 11px;
       font-weight: 400;
       color: var(--gray-4);
-      display: block;
-      margin-top: 2px;
+      margin-top: -1px;
     }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .header-actions button {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gray-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--gray-5);
+      transition: 0.15s;
+      border: 1px solid transparent;
+    }
+    .header-actions button:active { transform: scale(0.94); background: var(--gray-2); }
 
-    /* cards */
+    /* ===== SEARCH BAR ===== */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border: 1px solid var(--gray-2);
+      border-radius: 60px;
+      padding: 4px 16px 4px 18px;
+      gap: 10px;
+      margin-bottom: 16px;
+      transition: 0.15s;
+      box-shadow: var(--shadow-sm);
+    }
+    .search-bar:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(10,75,122,0.12);
+    }
+    .search-bar span { font-size: 18px; color: var(--gray-4); }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 12px 0;
+      font-size: 15px;
+      outline: none;
+      color: var(--gray-6);
+      min-width: 0;
+    }
+    .search-bar input::placeholder { color: var(--gray-4); }
+
+    /* ===== MODULE GRID ===== */
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 400px) { .module-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 600px) { .module-grid { grid-template-columns: repeat(6, 1fr); } }
+    @media (min-width: 900px) { .module-grid { grid-template-columns: repeat(8, 1fr); } }
+    .module-btn {
+      background: #fff;
+      border: 1px solid var(--gray-2);
+      border-radius: var(--radius-sm);
+      padding: 12px 6px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gray-5);
+      transition: 0.15s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      box-shadow: var(--shadow-sm);
+      line-height: 1.3;
+      min-height: 68px;
+      justify-content: center;
+    }
+    .module-btn span { font-size: 22px; display: block; }
+    .module-btn.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+      box-shadow: 0 0 0 2px rgba(10,75,122,0.15);
+    }
+    .module-btn:active { transform: scale(0.96); }
+
+    /* ===== CARDS ===== */
     .card {
-      background: white;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 20px 16px;
-      margin-bottom: 20px;
-      transition: all 0.1s ease;
-      border: 1px solid rgba(0,0,0,0.02);
+      background: #fff;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      padding: 18px 16px;
+      margin-bottom: 16px;
+      border: 1px solid var(--gray-2);
+      transition: 0.15s;
     }
-
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 14px;
       font-weight: 600;
-      font-size: 18px;
-      color: #0b1a2f;
+      font-size: 17px;
+      color: var(--gray-6);
     }
-
-    /* grid modules */
-    .module-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin: 12px 0 16px;
-    }
-
-    .module-btn {
-      background: white;
-      border: 1px solid var(--gray-2);
-      border-radius: var(--radius-sm);
-      padding: 16px 8px;
-      text-align: center;
-      font-weight: 500;
-      font-size: 14px;
-      color: var(--gray-5);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-      transition: all 0.15s;
-      cursor: pointer;
-      line-height: 1.3;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-    }
-    .module-btn.active {
-      background: var(--primary-light);
-      border-color: var(--primary);
-      color: var(--primary);
-      font-weight: 600;
-    }
-    .module-btn span {
-      font-size: 20px;
-    }
-
-    /* search */
-    .search-bar {
-      background: white;
+    .card-header .badge {
+      background: var(--gray-1);
+      padding: 2px 12px;
       border-radius: 60px;
-      padding: 8px 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid var(--gray-2);
-      margin-bottom: 20px;
-    }
-    .search-bar input {
-      border: none;
-      background: transparent;
-      padding: 12px 0;
-      width: 100%;
-      font-size: 15px;
-      outline: none;
-    }
-    .search-bar input::placeholder {
-      color: var(--gray-4);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gray-5);
     }
 
-    /* chatbot */
+    /* ===== DASHBOARD STATS ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    @media (min-width: 500px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
+    .stat-card {
+      background: var(--gray-1);
+      border-radius: var(--radius-sm);
+      padding: 12px 10px;
+      text-align: center;
+      border: 1px solid var(--gray-2);
+    }
+    .stat-card .num { font-size: 22px; font-weight: 700; color: var(--gray-6); }
+    .stat-card .label { font-size: 11px; color: var(--gray-4); margin-top: 2px; }
+    .stat-card.accent .num { color: var(--accent); }
+    .stat-card.primary .num { color: var(--primary); }
+
+    /* ===== CRM LEAD CARD ===== */
+    .lead-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--gray-1);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      border: 1px solid var(--gray-2);
+      cursor: pointer;
+      transition: 0.12s;
+    }
+    .lead-card:active { transform: scale(0.98); background: var(--gray-2); }
+    .lead-card .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .lead-card .info { flex: 1; min-width: 0; }
+    .lead-card .info .name { font-weight: 600; font-size: 15px; }
+    .lead-card .info .sub { font-size: 13px; color: var(--gray-5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lead-card .info .meta { font-size: 12px; color: var(--gray-4); display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+    .lead-card .status-badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 12px;
+      border-radius: 60px;
+      flex-shrink: 0;
+      background: var(--gray-3);
+      color: var(--gray-6);
+    }
+    .status-badge.new { background: #dbeafe; color: #1e40af; }
+    .status-badge.interested { background: #fef3c7; color: #92400e; }
+    .status-badge.documents { background: #fce4ec; color: #b71c1c; }
+    .status-badge.approved { background: #d1fae5; color: #065f46; }
+    .status-badge.rejected { background: #fecaca; color: #991b1b; }
+    .status-badge.disbursed { background: #d1fae5; color: #065f46; }
+    .status-badge.followup { background: #e0e7ff; color: #3730a3; }
+
+    /* ===== CHAT ===== */
     .chat-window {
-      background: white;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 12px 0 0;
+      background: #fff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-2);
       display: flex;
       flex-direction: column;
-      max-height: 500px;
-      border: 1px solid rgba(0,0,0,0.02);
+      max-height: 560px;
+      overflow: hidden;
     }
     .chat-messages {
-      padding: 0 16px;
+      flex: 1;
+      padding: 14px 16px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      max-height: 340px;
+      gap: 10px;
+      max-height: 380px;
       min-height: 200px;
+      background: var(--gray-0);
     }
     .chat-msg {
-      background: var(--gray-1);
-      padding: 14px 16px;
-      border-radius: 20px 20px 20px 4px;
+      background: #fff;
+      padding: 12px 16px;
+      border-radius: 16px 16px 16px 4px;
       max-width: 88%;
       align-self: flex-start;
-      font-size: 15px;
-      line-height: 1.5;
+      font-size: 14px;
+      line-height: 1.6;
       white-space: pre-wrap;
       word-break: break-word;
       border: 1px solid var(--gray-2);
+      box-shadow: var(--shadow-sm);
     }
     .chat-msg.user {
       background: var(--primary);
-      color: white;
+      color: #fff;
       align-self: flex-end;
-      border-radius: 20px 20px 4px 20px;
+      border-radius: 16px 16px 4px 16px;
       border: none;
     }
     .chat-msg .code-block {
-      background: #1e293b;
+      background: var(--gray-6);
       color: #e2e8f0;
       padding: 10px 14px;
-      border-radius: 12px;
+      border-radius: 10px;
       font-family: monospace;
       font-size: 13px;
       overflow-x: auto;
-      margin: 8px 0;
+      margin: 6px 0;
       white-space: pre;
     }
+    .chat-msg strong { color: var(--primary); }
+    .chat-msg.user strong { color: #fff; }
     .chat-input-row {
       display: flex;
       gap: 8px;
-      padding: 12px 16px;
+      padding: 10px 14px;
       border-top: 1px solid var(--gray-2);
-      background: white;
-      border-radius: 0 0 var(--radius) var(--radius);
+      background: #fff;
     }
     .chat-input-row input {
       flex: 1;
       border: 1px solid var(--gray-2);
-      border-radius: 40px;
-      padding: 12px 18px;
-      font-size: 15px;
+      border-radius: 60px;
+      padding: 10px 16px;
+      font-size: 14px;
       outline: none;
       background: var(--gray-1);
     }
+    .chat-input-row input:focus { border-color: var(--primary); }
     .chat-input-row button {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
       background: var(--primary);
-      border: none;
-      color: white;
-      width: 48px;
-      height: 48px;
-      border-radius: 40px;
-      font-size: 20px;
-      cursor: pointer;
+      color: #fff;
+      font-size: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
       transition: 0.1s;
     }
-    .chat-input-row button:active {
-      transform: scale(0.94);
-    }
+    .chat-input-row button:active { transform: scale(0.92); }
     .suggestions {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      padding: 8px 16px 12px;
+      gap: 6px;
+      padding: 6px 14px 10px;
+      background: var(--gray-0);
+      border-top: 1px solid var(--gray-2);
     }
     .suggestion-chip {
-      background: var(--gray-1);
+      background: #fff;
       border: 1px solid var(--gray-2);
-      border-radius: 30px;
-      padding: 6px 14px;
-      font-size: 13px;
+      border-radius: 40px;
+      padding: 4px 14px;
+      font-size: 12px;
       color: var(--gray-5);
       cursor: pointer;
+      transition: 0.1s;
     }
-    .typing-indicator {
+    .suggestion-chip:active { background: var(--gray-2); }
+    .chat-actions {
       display: flex;
-      gap: 4px;
-      padding: 6px 0;
+      gap: 6px;
+      padding: 4px 14px 8px;
+      flex-wrap: wrap;
+      background: var(--gray-0);
     }
+    .chat-actions button {
+      background: #fff;
+      border: 1px solid var(--gray-2);
+      border-radius: 40px;
+      padding: 4px 14px;
+      font-size: 12px;
+      color: var(--gray-5);
+      cursor: pointer;
+      transition: 0.1s;
+    }
+    .chat-actions button:active { background: var(--gray-2); }
+    .typing-indicator { display: flex; gap: 4px; padding: 4px 0; }
     .typing-dot {
-      width: 8px;
-      height: 8px;
+      width: 8px; height: 8px;
       background: var(--gray-4);
       border-radius: 50%;
       animation: pulse 1.2s infinite;
     }
     .typing-dot:nth-child(2) { animation-delay: 0.2s; }
     .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes pulse { 0%,80%,100% { opacity: 0.4; } 40% { opacity: 1; } }
+    @keyframes pulse { 0%,80%,100% { opacity: 0.3; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
 
-    .chat-actions {
+    /* ===== TABS ===== */
+    .tabs {
       display: flex;
-      gap: 6px;
-      padding: 4px 16px 12px;
-      flex-wrap: wrap;
-    }
-    .chat-actions button {
-      background: transparent;
-      border: none;
-      color: var(--gray-4);
-      font-size: 13px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: var(--gray-1);
-      border: 1px solid var(--gray-2);
-      cursor: pointer;
-    }
-
-    /* CRM table */
-    .crm-table {
-      width: 100%;
-      font-size: 14px;
-      border-collapse: collapse;
-      margin: 8px 0;
-    }
-    .crm-table th {
-      text-align: left;
-      padding: 8px 0;
-      font-weight: 600;
-      color: var(--gray-5);
+      gap: 4px;
+      overflow-x: auto;
+      padding: 2px 0 10px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-wrap: nowrap;
       border-bottom: 1px solid var(--gray-2);
+      margin-bottom: 14px;
     }
-    .crm-table td {
-      padding: 8px 0;
-      border-bottom: 1px solid #f0f3f8;
-      vertical-align: middle;
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-5);
+      white-space: nowrap;
+      transition: 0.15s;
+      background: transparent;
+      border: 1px solid transparent;
     }
-    .status-badge {
+    .tab-btn.active {
       background: var(--primary-light);
       color: var(--primary);
-      padding: 2px 12px;
-      border-radius: 60px;
-      font-size: 12px;
-      font-weight: 500;
-      display: inline-block;
+      border-color: var(--primary);
     }
+    .tab-btn:active { background: var(--gray-2); }
 
-    /* wizard analysis */
-    .wizard-step {
+    /* ===== CUSTOMER PROFILE ===== */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--gray-2);
+      margin-bottom: 14px;
+    }
+    .profile-header .avatar-lg {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .profile-header .info h2 { font-size: 18px; font-weight: 600; }
+    .profile-header .info .sub { font-size: 14px; color: var(--gray-5); }
+
+    /* ===== TIMELINE ===== */
+    .timeline-item {
+      display: flex;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--gray-2);
+    }
+    .timeline-item .time { font-size: 12px; color: var(--gray-4); min-width: 60px; }
+    .timeline-item .content { flex: 1; font-size: 14px; }
+
+    /* ===== BOTTOM NAV ===== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-top: 1px solid var(--gray-2);
+      display: flex;
+      justify-content: space-around;
+      padding: 6px 0 env(safe-area-inset-bottom);
+      height: var(--bottom-nav-height);
+      z-index: 100;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.04);
+    }
+    .bottom-nav button {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-    }
-    .wizard-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
       align-items: center;
-    }
-    .wizard-row label {
-      min-width: 100px;
+      font-size: 10px;
+      color: var(--gray-4);
+      gap: 2px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      transition: 0.12s;
       font-weight: 500;
-      font-size: 14px;
-      color: var(--gray-5);
+      background: transparent;
+      border: none;
+      min-width: 56px;
     }
-    .wizard-row input, .wizard-row select {
-      flex: 1;
-      padding: 12px 14px;
-      border: 1px solid var(--gray-2);
-      border-radius: 60px;
-      background: var(--gray-1);
-      font-size: 14px;
-      outline: none;
-      min-width: 140px;
-    }
-    .analysis-result {
-      background: var(--gray-1);
-      border-radius: var(--radius-sm);
-      padding: 16px;
-      margin-top: 12px;
-      border-left: 4px solid var(--accent);
-    }
+    .bottom-nav button span { font-size: 22px; }
+    .bottom-nav button.active { color: var(--primary); }
+    .bottom-nav button:active { transform: scale(0.92); }
 
-    /* expandable schemes */
-    .scheme-item {
-      border: 1px solid var(--gray-2);
-      border-radius: var(--radius-sm);
-      margin-bottom: 12px;
-      overflow: hidden;
-    }
-    .scheme-header {
-      padding: 16px;
-      background: white;
-      font-weight: 600;
-      display: flex;
-      justify-content: space-between;
-      cursor: pointer;
-    }
-    .scheme-body {
-      padding: 0 16px 16px;
-      background: var(--gray-1);
-      font-size: 14px;
-      line-height: 1.6;
-      display: none;
-    }
-    .scheme-body.open {
-      display: block;
-    }
-    .scheme-body strong {
-      color: var(--primary);
-    }
-
-    /* loan cards */
-    .loan-card {
-      background: white;
-      border-radius: var(--radius-sm);
-      padding: 16px;
-      margin-bottom: 10px;
-      border: 1px solid var(--gray-2);
-    }
-    .loan-card h4 {
-      margin-bottom: 6px;
-    }
-
-    /* report */
-    .report-preview {
-      background: white;
-      padding: 20px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--gray-2);
-      font-size: 14px;
-    }
-    .report-preview hr {
-      margin: 16px 0;
-      border: 0;
-      border-top: 1px solid var(--gray-2);
-    }
-
-    /* utility */
-    .mt-2 { margin-top: 8px; }
-    .mb-2 { margin-bottom: 8px; }
-    .flex { display: flex; gap: 8px; flex-wrap: wrap; }
-    .text-muted { color: var(--gray-4); font-size: 14px; }
+    /* ===== UTILITY ===== */
+    .hidden { display: none !important; }
+    .flex { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    .gap-1 { gap: 6px; }
+    .gap-2 { gap: 12px; }
+    .mt-1 { margin-top: 8px; }
+    .mt-2 { margin-top: 16px; }
+    .mb-1 { margin-bottom: 8px; }
+    .mb-2 { margin-bottom: 16px; }
+    .text-muted { color: var(--gray-4); font-size: 13px; }
+    .text-sm { font-size: 13px; }
+    .w-full { width: 100%; }
     .btn-primary {
       background: var(--primary);
-      border: none;
-      padding: 12px 24px;
+      color: #fff;
+      padding: 10px 24px;
       border-radius: 60px;
-      color: white;
       font-weight: 500;
       font-size: 14px;
+      border: none;
+      transition: 0.15s;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
+    .btn-primary:active { transform: scale(0.96); }
     .btn-outline {
       background: transparent;
       border: 1px solid var(--gray-3);
       padding: 10px 20px;
       border-radius: 60px;
       font-weight: 500;
+      color: var(--gray-5);
+      transition: 0.15s;
+      cursor: pointer;
     }
-    .hidden { display: none !important; }
+    .btn-outline:active { background: var(--gray-2); }
+    .badge-pill {
+      display: inline-block;
+      padding: 2px 12px;
+      border-radius: 60px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .badge-pill.primary { background: var(--primary-light); color: var(--primary); }
+    .badge-pill.accent { background: var(--accent-light); color: var(--accent); }
 
-    /* responsive desktop */
+    /* ===== RESPONSIVE TWEAKS ===== */
     @media (min-width: 768px) {
-      body { padding: 32px 40px 80px; }
-      .app-container { max-width: 900px; }
-      .module-grid { grid-template-columns: repeat(4, 1fr); }
-      .chat-window { max-height: 600px; }
-      .chat-messages { max-height: 400px; }
-      .crm-table td, .crm-table th { padding: 12px 8px; }
+      .bottom-nav { display: none; }
+      body { padding-bottom: 0; }
+      .module-grid { grid-template-columns: repeat(6, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .module-grid { grid-template-columns: repeat(8, 1fr); }
     }
     @media print {
       .no-print { display: none !important; }
+      .bottom-nav { display: none !important; }
+      body { padding: 0; background: #fff; }
+      .app { max-width: 100%; }
+      .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
     }
+
+    /* ===== SIDEBAR OVERLAY ===== */
+    .sidebar-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.25s;
+    }
+    .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: 280px;
+      height: 100%;
+      background: #fff;
+      z-index: 201;
+      transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      padding: 20px 16px;
+      overflow-y: auto;
+      box-shadow: 4px 0 24px rgba(0,0,0,0.08);
+    }
+    .sidebar.open { left: 0; }
+    .sidebar .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 24px;
+      color: var(--gray-4);
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .sidebar .brand-side { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+    .sidebar .brand-side .icon { width: 36px; height: 36px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; }
+    .sidebar .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--gray-5);
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.1s;
+      margin-bottom: 2px;
+    }
+    .sidebar .nav-item:active { background: var(--gray-1); }
+    .sidebar .nav-item.active { background: var(--primary-light); color: var(--primary); }
+    .sidebar .nav-item span { font-size: 18px; }
   </style>
 </head>
 <body>
-<div class="app-container" id="app">
 
-  <!-- brand -->
-  <div class="brand">
-    <div class="brand-icon">₴</div>
-    <div><h1>Smile Financial</h1><small>AI Funding Consultant Pro</small></div>
+<!-- ===== SIDEBAR ===== -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<div class="sidebar" id="sidebar">
+  <button class="close-btn" onclick="closeSidebar()">✕</button>
+  <div class="brand-side">
+    <div class="icon">₴</div>
+    <div><strong>Smile</strong> <span class="text-muted" style="font-size:12px;">Financial</span></div>
   </div>
+  <div style="margin-top:8px;">
+    <div class="nav-item active"><span>📊</span> Dashboard</div>
+    <div class="nav-item"><span>🤖</span> AI Chat</div>
+    <div class="nav-item"><span>📇</span> CRM</div>
+    <div class="nav-item"><span>📈</span> Analysis</div>
+    <div class="nav-item"><span>🏛️</span> Schemes</div>
+    <div class="nav-item"><span>💰</span> Loans</div>
+    <div class="nav-item"><span>🧮</span> EMI</div>
+    <div class="nav-item"><span>🎯</span> Subsidy</div>
+    <div class="nav-item"><span>📄</span> DPR</div>
+    <div class="nav-item"><span>⏳</span> Timeline</div>
+    <div class="nav-item"><span>📋</span> Report</div>
+    <div class="nav-item"><span>🎓</span> Training</div>
+    <div class="nav-item"><span>⚙️</span> Settings</div>
+  </div>
+</div>
 
-  <!-- unified search -->
+<!-- ===== APP ===== -->
+<div class="app" id="app">
+
+  <!-- HEADER -->
+  <header class="app-header no-print">
+    <div class="brand" onclick="openSidebar()" style="cursor:pointer;">
+      <div class="brand-icon">₴</div>
+      <div><h1>Smile</h1><small>Funding Consultant</small></div>
+    </div>
+    <div class="header-actions">
+      <button onclick="openSidebar()" aria-label="Menu">☰</button>
+      <button onclick="window.location.reload()" aria-label="Refresh">⟳</button>
+    </div>
+  </header>
+
+  <!-- SEARCH -->
   <div class="search-bar no-print">
-    <span style="color:var(--gray-4);">🔍</span>
-    <input type="text" id="globalSearch" placeholder="Search schemes, loans, business, documents...">
+    <span>🔍</span>
+    <input type="text" id="globalSearch" placeholder="Search customers, schemes, loans, knowledge...">
   </div>
 
-  <!-- module grid -->
+  <!-- MODULE GRID -->
   <div class="module-grid no-print" id="moduleGrid">
     <div class="module-btn active" data-module="dashboard"><span>📊</span>Dashboard</div>
     <div class="module-btn" data-module="chat"><span>🤖</span>AI Chat</div>
@@ -480,81 +720,129 @@
     <div class="module-btn" data-module="training"><span>🎓</span>Training</div>
   </div>
 
-  <!-- dynamic content -->
+  <!-- ===== MODULE CONTENT ===== -->
   <div id="moduleContent">
-    <!-- DASHBOARD default -->
+
+    <!-- DASHBOARD -->
     <div id="dashboard-module">
-      <div class="card"><div class="card-header">📊 Dashboard</div>
-        <p style="margin-bottom:12px;color:var(--gray-5);">नमस्ते! आज के 3 नए leads, 2 follow-ups पेंडिंग।</p>
-        <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;">
-          <div><span class="text-muted">Total Leads</span><br><strong>18</strong></div>
-          <div><span class="text-muted">Active</span><br><strong>9</strong></div>
-          <div><span class="text-muted">Approved</span><br><strong>4</strong></div>
-          <div><span class="text-muted">Disbursed</span><br><strong>₹2.8Cr</strong></div>
+      <div class="card">
+        <div class="card-header">📊 Dashboard <span class="badge">Today</span></div>
+        <div class="stats-grid">
+          <div class="stat-card primary"><div class="num" id="statTotal">18</div><div class="label">Total Leads</div></div>
+          <div class="stat-card"><div class="num" id="statInterested">5</div><div class="label">Interested</div></div>
+          <div class="stat-card accent"><div class="num" id="statApproved">4</div><div class="label">Approved</div></div>
+          <div class="stat-card"><div class="num" id="statDisbursed">₹2.8Cr</div><div class="label">Disbursed</div></div>
+          <div class="stat-card"><div class="num" id="statFollowup">3</div><div class="label">Today's Follow-up</div></div>
+          <div class="stat-card"><div class="num" id="statPending">6</div><div class="label">Documents Pending</div></div>
         </div>
-        <hr style="margin:16px 0;border-color:var(--gray-2);">
-        <div class="text-muted">📌 PMEGP scheme update • 3 new loan products</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;padding-top:8px;border-top:1px solid var(--gray-2);">
+          <span class="text-muted">📌 Conversion Rate: <strong>22%</strong></span>
+          <span class="text-muted">🔥 Hot Leads: <strong>4</strong></span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">📋 Recent Activity</div>
+        <div id="recentActivity">
+          <div class="lead-card" style="background:transparent;border:none;padding:6px 0;">
+            <div style="flex:1;font-size:13px;">📞 Call with Rajesh Kumar · Interested</div>
+            <span class="text-muted" style="font-size:12px;">10:30 AM</span>
+          </div>
+          <div class="lead-card" style="background:transparent;border:none;padding:6px 0;">
+            <div style="flex:1;font-size:13px;">📄 Documents submitted by Priya Sharma</div>
+            <span class="text-muted" style="font-size:12px;">9:15 AM</span>
+          </div>
+          <div class="lead-card" style="background:transparent;border:none;padding:6px 0;">
+            <div style="flex:1;font-size:13px;">✅ Loan approved for Amit Singh · ₹25L</div>
+            <span class="text-muted" style="font-size:12px;">Yesterday</span>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- AI CHAT -->
     <div id="chat-module" class="hidden">
-      <div class="chat-window">
-        <div class="chat-messages" id="chatMessages">
-          <div class="chat-msg">👋 नमस्ते! मैं Smile AI Consultant हूँ। बताएं किस funding में help चाहिए?</div>
-        </div>
-        <div class="suggestions" id="suggestionChips">
-          <span class="suggestion-chip">50 lakh manufacturing loan</span>
-          <span class="suggestion-chip">Startup grant</span>
-          <span class="suggestion-chip">Dairy farm funding</span>
-          <span class="suggestion-chip">PMEGP</span>
-        </div>
-        <div class="chat-actions">
-          <button id="clearChatBtn">🗑️ Clear</button>
-          <button id="newChatBtn">✨ New</button>
-          <button id="copyLastReplyBtn">📋 Copy reply</button>
-        </div>
-        <div class="chat-input-row">
-          <input type="text" id="chatInput" placeholder="Ask anything...">
-          <button id="sendChatBtn">➤</button>
+      <div class="card" style="padding:0;overflow:hidden;border:none;">
+        <div class="chat-window">
+          <div class="chat-messages" id="chatMessages">
+            <div class="chat-msg">👋 नमस्ते! मैं Smile AI Consultant हूँ। बताएं किस funding में help चाहिए?</div>
+          </div>
+          <div class="suggestions" id="suggestionChips">
+            <span class="suggestion-chip">50 lakh manufacturing loan</span>
+            <span class="suggestion-chip">Startup grant</span>
+            <span class="suggestion-chip">Dairy farm funding</span>
+            <span class="suggestion-chip">PMEGP</span>
+            <span class="suggestion-chip">Business loan process</span>
+          </div>
+          <div class="chat-actions">
+            <button id="clearChatBtn">🗑️ Clear</button>
+            <button id="newChatBtn">✨ New</button>
+            <button id="copyLastReplyBtn">📋 Copy</button>
+          </div>
+          <div class="chat-input-row">
+            <input type="text" id="chatInput" placeholder="Ask anything...">
+            <button id="sendChatBtn">➤</button>
+          </div>
         </div>
       </div>
+      <div class="text-muted" style="font-size:12px;padding:0 4px;">💡 AI remembers current customer context when profile is open.</div>
     </div>
 
     <!-- CRM -->
     <div id="crm-module" class="hidden">
-      <div class="card"><div class="card-header">📇 CRM · Leads</div>
-        <button class="btn-primary" id="addLeadBtn" style="margin-bottom:12px;">+ Add Lead</button>
-        <div style="overflow-x:auto;">
-          <table class="crm-table" id="crmTable">
-            <thead><tr><th>Name</th><th>Business</th><th>Amount</th><th>Status</th><th>Next</th></tr></thead>
-            <tbody id="crmBody">
-              <tr><td>Rajesh Kumar</td><td>Food Processing</td><td>₹25L</td><td><span class="status-badge">Interested</span></td><td>10 Jul</td></tr>
-              <tr><td>Priya Sharma</td><td>Dairy</td><td>₹50L</td><td><span class="status-badge">Documents</span></td><td>12 Jul</td></tr>
-            </tbody>
-          </table>
+      <div class="card">
+        <div class="card-header">📇 CRM · Leads <button class="btn-primary" id="addLeadBtn" style="padding:6px 16px;font-size:13px;">+ Add</button></div>
+        <div id="crmList">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- CUSTOMER PROFILE (hidden by default, shown when lead clicked) -->
+    <div id="profile-module" class="hidden">
+      <div class="card">
+        <div class="flex-between mb-1">
+          <button class="btn-outline" id="backToCrmBtn" style="padding:6px 16px;font-size:13px;">← Back</button>
+          <button class="btn-primary" id="printProfileBtn" style="padding:6px 16px;font-size:13px;">🖨️ Print</button>
+        </div>
+        <div id="profileContent">
+          <!-- Rendered by JS -->
+        </div>
+        <div class="tabs" id="profileTabs">
+          <button class="tab-btn active" data-tab="overview">Overview</button>
+          <button class="tab-btn" data-tab="timeline">Timeline</button>
+          <button class="tab-btn" data-tab="notes">Notes</button>
+          <button class="tab-btn" data-tab="ai">AI Analysis</button>
+          <button class="tab-btn" data-tab="documents">Documents</button>
+          <button class="tab-btn" data-tab="schemes">Schemes</button>
+          <button class="tab-btn" data-tab="loans">Loans</button>
+        </div>
+        <div id="profileTabContent">
+          <!-- Rendered by JS -->
         </div>
       </div>
     </div>
 
     <!-- ANALYSIS -->
     <div id="analysis-module" class="hidden">
-      <div class="card"><div class="card-header">📈 Customer Analysis</div>
+      <div class="card">
+        <div class="card-header">📈 Customer Analysis</div>
         <div class="wizard-step">
-          <div class="wizard-row"><label>Business Type</label><input id="anBusType" placeholder="e.g. Manufacturing"></div>
-          <div class="wizard-row"><label>Business Age (yrs)</label><input id="anAge" type="number" placeholder="3"></div>
-          <div class="wizard-row"><label>Turnover (Lakhs)</label><input id="anTurnover" type="number" placeholder="80"></div>
-          <div class="wizard-row"><label>GST</label><select id="anGst"><option>Yes</option><option>No</option></select></div>
-          <div class="wizard-row"><label>Udyam</label><select id="anUdyam"><option>Yes</option><option>No</option></select></div>
-          <div class="wizard-row"><label>CIBIL</label><input id="anCibil" placeholder="720"></div>
-          <div class="wizard-row"><label>Funding Need (Lakhs)</label><input id="anFunding" type="number" placeholder="50"></div>
-          <button class="btn-primary" id="analyzeBtn">🔍 Generate Analysis</button>
-          <div id="analysisResult" class="analysis-result hidden">
-            <strong>Business Summary</strong><p id="anSummary">-</p>
-            <strong>Risk Level</strong><p id="anRisk">-</p>
-            <strong>Possible Funding</strong><p id="anPossible">-</p>
-            <strong>Documents</strong><p id="anDocs">-</p>
-            <strong>Consultant Notes</strong><p id="anNotes">-</p>
+          <div class="flex gap-1" style="flex-wrap:wrap;">
+            <input id="anBusType" placeholder="Business Type" style="flex:1;min-width:120px;padding:10px 14px;border:1px solid var(--gray-2);border-radius:60px;font-size:14px;">
+            <input id="anAge" type="number" placeholder="Age (yrs)" style="flex:1;min-width:80px;padding:10px 14px;border:1px solid var(--gray-2);border-radius:60px;font-size:14px;">
+          </div>
+          <div class="flex gap-1" style="flex-wrap:wrap;">
+            <input id="anTurnover" type="number" placeholder="Turnover (Lakhs)" style="flex:1;min-width:100px;padding:10px 14px;border:1px solid var(--gray-2);border-radius:60px;font-size:14px;">
+            <input id="anCibil" placeholder="CIBIL" style="flex:1;min-width:80px;padding:10px 14px;border:1px solid var(--gray-2);border-radius:60px;font-size:14px;">
+            <input id="anFunding" type="number" placeholder="Funding Need" style="flex:1;min-width:100px;padding:10px 14px;border:1px solid var(--gray-2);border-radius:60px;font-size:14px;">
+          </div>
+          <div class="flex gap-1" style="flex-wrap:wrap;">
+            <select id="anGst" style="flex:1;min-width:80px;padding:10px 14px;border:1px solid var(--gray-2);border-radius:60px;font-size:14px;background:#fff;"><option>GST Yes</option><option>GST No</option></select>
+            <select id="anUdyam" style="flex:1;min-width:80px;padding:10px 14px;border:1px solid var(--gray-2);border-radius:60px;font-size:14px;background:#fff;"><option>Udyam Yes</option><option>Udyam No</option></select>
+          </div>
+          <button class="btn-primary w-full" id="analyzeBtn" style="justify-content:center;">🔍 Generate Analysis</button>
+          <div id="analysisResult" class="hidden" style="background:var(--gray-1);border-radius:var(--radius-sm);padding:16px;margin-top:12px;border-left:4px solid var(--accent);">
+            <div id="analysisContent"></div>
           </div>
         </div>
       </div>
@@ -562,42 +850,51 @@
 
     <!-- SCHEMES -->
     <div id="schemes-module" class="hidden">
-      <div class="card"><div class="card-header">🏛️ Government Schemes</div>
+      <div class="card">
+        <div class="card-header">🏛️ Government Schemes <span class="badge" id="schemeCount">0</span></div>
         <div id="schemesContainer"></div>
       </div>
     </div>
 
     <!-- LOANS -->
     <div id="loans-module" class="hidden">
-      <div class="card"><div class="card-header">💰 Loan Products</div>
+      <div class="card">
+        <div class="card-header">💰 Loan Products</div>
         <div id="loansContainer"></div>
       </div>
     </div>
 
     <!-- EMI -->
     <div id="emi-module" class="hidden">
-      <div class="card"><div class="card-header">🧮 EMI Calculator</div>
-        <div class="wizard-row"><label>Loan Amount</label><input id="emiAmount" value="5000000"></div>
-        <div class="wizard-row"><label>Rate (% p.a.)</label><input id="emiRate" value="10.5"></div>
-        <div class="wizard-row"><label>Tenure (months)</label><input id="emiTenure" value="60"></div>
-        <button class="btn-primary" id="calcEmiBtn">Calculate EMI</button>
-        <div id="emiResult" class="analysis-result" style="margin-top:16px;">EMI: ₹1,07,482</div>
+      <div class="card">
+        <div class="card-header">🧮 EMI Calculator</div>
+        <div class="flex gap-1" style="flex-wrap:wrap;">
+          <input id="emiAmount" value="5000000" style="flex:1;min-width:100px;padding:10px 14px;border:1px solid var(--gray-2);border-radius:60px;font-size:14px;">
+          <input id="emiRate" value="10.5" style="flex:1;min-width:80px;padding:10px 14px;border:1px solid var(--gray-2);border-radius:60px;font-size:14px;">
+          <input id="emiTenure" value="60" style="flex:1;min-width:80px;padding:10px 14px;border:1px solid var(--gray-2);border-radius:60px;font-size:14px;">
+        </div>
+        <button class="btn-primary w-full" id="calcEmiBtn" style="justify-content:center;">Calculate EMI</button>
+        <div id="emiResult" style="background:var(--gray-1);border-radius:var(--radius-sm);padding:16px;margin-top:12px;font-weight:600;font-size:18px;text-align:center;">EMI: ₹1,07,482</div>
       </div>
     </div>
 
     <!-- SUBSIDY -->
     <div id="subsidy-module" class="hidden">
-      <div class="card"><div class="card-header">🎯 Subsidy Calculator</div>
-        <div class="wizard-row"><label>Project Cost</label><input id="subProject" value="10000000"></div>
-        <div class="wizard-row"><label>Subsidy %</label><input id="subPercent" value="30"></div>
-        <button class="btn-primary" id="calcSubsidyBtn">Calculate Subsidy</button>
-        <div id="subsidyResult" class="analysis-result" style="margin-top:16px;">Subsidy Amount: ₹30,00,000</div>
+      <div class="card">
+        <div class="card-header">🎯 Subsidy Calculator</div>
+        <div class="flex gap-1" style="flex-wrap:wrap;">
+          <input id="subProject" value="10000000" style="flex:1;min-width:100px;padding:10px 14px;border:1px solid var(--gray-2);border-radius:60px;font-size:14px;">
+          <input id="subPercent" value="30" style="flex:1;min-width:80px;padding:10px 14px;border:1px solid var(--gray-2);border-radius:60px;font-size:14px;">
+        </div>
+        <button class="btn-primary w-full" id="calcSubsidyBtn" style="justify-content:center;">Calculate Subsidy</button>
+        <div id="subsidyResult" style="background:var(--gray-1);border-radius:var(--radius-sm);padding:16px;margin-top:12px;font-weight:600;font-size:18px;text-align:center;">Subsidy: ₹30,00,000</div>
       </div>
     </div>
 
     <!-- DPR -->
     <div id="dpr-module" class="hidden">
-      <div class="card"><div class="card-header">📄 DPR Assistant</div>
+      <div class="card">
+        <div class="card-header">📄 DPR Assistant</div>
         <p class="text-muted">DPR draft ready. Download/export placeholder.</p>
         <button class="btn-primary">Generate DPR (sample)</button>
       </div>
@@ -605,327 +902,784 @@
 
     <!-- TIMELINE -->
     <div id="timeline-module" class="hidden">
-      <div class="card"><div class="card-header">⏳ Customer Timeline</div>
-        <div>• 01 Jul: Lead created</div>
-        <div>• 03 Jul: KYC submitted</div>
-        <div>• 05 Jul: Doc verification</div>
-        <div>• 08 Jul: Under review</div>
+      <div class="card">
+        <div class="card-header">⏳ Customer Timeline</div>
+        <div id="timelineList">
+          <div class="timeline-item"><span class="time">01 Jul</span><div class="content">📌 Lead created · Rajesh Kumar</div></div>
+          <div class="timeline-item"><span class="time">03 Jul</span><div class="content">📄 KYC submitted</div></div>
+          <div class="timeline-item"><span class="time">05 Jul</span><div class="content">✅ Documents verified</div></div>
+          <div class="timeline-item"><span class="time">08 Jul</span><div class="content">📞 Follow-up call · Interested</div></div>
+        </div>
       </div>
     </div>
 
     <!-- REPORT -->
     <div id="report-module" class="hidden">
-      <div class="card"><div class="card-header">📋 Customer Report</div>
-        <div class="report-preview" id="reportPreview">
+      <div class="card">
+        <div class="card-header">📋 Customer Report</div>
+        <div id="reportPreview" style="background:var(--gray-1);border-radius:var(--radius-sm);padding:20px;">
           <h3>Smile Financial · Customer Report</h3>
           <p><strong>Name:</strong> Rajesh Kumar</p>
           <p><strong>Business:</strong> Food Processing</p>
           <p><strong>Funding:</strong> ₹25 Lakhs</p>
           <p><strong>Status:</strong> Interested</p>
-          <hr>
-          <p><strong>Analysis:</strong> Low risk, eligible for PMEGP.</p>
-          <p><strong>Consultant:</strong> श्रीमती Priya (Smile)</p>
+          <hr style="margin:12px 0;border:0;border-top:1px solid var(--gray-2);">
+          <p><strong>AI Analysis:</strong> Low risk, eligible for PMEGP. Recommended to apply.</p>
+          <p><strong>Consultant:</strong> Smile Team</p>
         </div>
-        <button class="btn-primary no-print" style="margin-top:12px;" onclick="window.print()">🖨️ Print Report</button>
+        <button class="btn-primary no-print" style="margin-top:12px;width:100%;justify-content:center;" onclick="window.print()">🖨️ Print Report</button>
       </div>
     </div>
 
     <!-- TRAINING -->
     <div id="training-module" class="hidden">
-      <div class="card"><div class="card-header">🎓 Training Center</div>
+      <div class="card">
+        <div class="card-header">🎓 Training Center</div>
         <p class="text-muted">📘 Funding basics · Scheme awareness · DPR writing</p>
-        <div style="background:var(--gray-1);padding:12px;border-radius:var(--radius-sm);">Module 1: PMEGP overview (video placeholder)</div>
+        <div style="background:var(--gray-1);padding:14px;border-radius:var(--radius-sm);margin-top:8px;">Module 1: PMEGP overview (video placeholder)</div>
+        <div style="background:var(--gray-1);padding:14px;border-radius:var(--radius-sm);margin-top:8px;">Module 2: MUDRA loan process</div>
       </div>
     </div>
-  </div>
 
-  <!-- hidden config -->
-  <div style="display:none;">CONFIG loaded</div>
-</div>
+  </div><!-- /moduleContent -->
+</div><!-- /app -->
 
+<!-- ===== BOTTOM NAV ===== -->
+<nav class="bottom-nav no-print" id="bottomNav">
+  <button class="active" data-module="dashboard"><span>📊</span>Home</button>
+  <button data-module="chat"><span>🤖</span>Chat</button>
+  <button data-module="crm"><span>📇</span>CRM</button>
+  <button data-module="analysis"><span>📈</span>Analyse</button>
+  <button data-module="schemes"><span>🏛️</span>Schemes</button>
+</nav>
+
+<!-- ============================================================ -->
+<!-- ===== JAVASCRIPT ===== -->
 <script>
-  (function(){
-    // ----- CONFIG (no API keys hardcoded) -----
-    const CONFIG = {
-      AI_API_URL: "",
-      AI_MODEL: "",
-    };
+// ============================================================
+// CONFIGURATION
+// ============================================================
+const CONFIG = {
+  AI_API_URL: window.ENV?.AI_API_URL || '',
+  AI_MODEL: window.ENV?.AI_MODEL || '',
+  GROQ_API_KEY: window.ENV?.GROQ_API_KEY || '',
+};
 
-    // ----- LOCAL STORAGE helpers -----
-    function loadFromStorage(key, defaultVal) {
-      try {
-        const data = localStorage.getItem('smile_'+key);
-        return data ? JSON.parse(data) : defaultVal;
-      } catch(e) { return defaultVal; }
-    }
-    function saveToStorage(key, val) {
-      localStorage.setItem('smile_'+key, JSON.stringify(val));
-    }
+// For production, set these via environment variables or window.ENV
+if (typeof window !== 'undefined') {
+  window.CONFIG = CONFIG;
+}
 
-    // ----- state -----
-    let chatHistory = loadFromStorage('chat', [{role:'assistant', content:'👋 नमस्ते! मैं Smile AI Consultant हूँ। बताएं किस funding में help चाहिए?'}]);
-    let leads = loadFromStorage('leads', [
-      {name:'Rajesh Kumar', mobile:'9876543210', business:'Food Processing', requirement:'Working capital', amount:'25', status:'Interested', nextFollowup:'2026-07-10', priority:'High', source:'Referral'},
-      {name:'Priya Sharma', mobile:'9876543211', business:'Dairy', requirement:'Machinery', amount:'50', status:'Documents Pending', nextFollowup:'2026-07-12', priority:'Medium', source:'Website'}
-    ]);
+// ============================================================
+// DATA STORE (in-memory + localStorage)
+// ============================================================
+const Store = {
+  leads: [],
+  chatHistory: [],
+  currentLeadId: null,
+  selectedModule: 'dashboard',
 
-    // ----- DOM refs -----
-    const moduleBtns = document.querySelectorAll('.module-btn');
-    const moduleContent = document.getElementById('moduleContent');
-    const globalSearch = document.getElementById('globalSearch');
-
-    // module switching
-    function showModule(moduleId) {
-      // hide all module divs
-      document.querySelectorAll('[id$="-module"]').forEach(el => el.classList.add('hidden'));
-      const target = document.getElementById(moduleId+'-module');
-      if(target) target.classList.remove('hidden');
-      // update active button
-      moduleBtns.forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.querySelector(`.module-btn[data-module="${moduleId}"]`);
-      if(activeBtn) activeBtn.classList.add('active');
-      // save last module
-      saveToStorage('lastModule', moduleId);
-    }
-
-    // load last module or dashboard
-    const lastModule = loadFromStorage('lastModule', 'dashboard');
-    showModule(lastModule);
-
-    moduleBtns.forEach(btn => {
-      btn.addEventListener('click', function(e){
-        const mod = this.dataset.module;
-        if(mod) showModule(mod);
-      });
-    });
-
-    // ----- CHATBOT -----
-    const chatMessages = document.getElementById('chatMessages');
-    const chatInput = document.getElementById('chatInput');
-    const sendBtn = document.getElementById('sendChatBtn');
-    const suggestionChips = document.getElementById('suggestionChips');
-
-    function renderChat() {
-      chatMessages.innerHTML = '';
-      chatHistory.forEach(msg => {
-        const div = document.createElement('div');
-        div.className = 'chat-msg' + (msg.role === 'user' ? ' user' : '');
-        // markdown-like code block support (simple)
-        let content = msg.content;
-        if (content.includes('```')) {
-          const parts = content.split('```');
-          content = parts.map((p,i) => {
-            if(i%2===1) return `<div class="code-block">${p}</div>`;
-            return p;
-          }).join('');
-        }
-        div.innerHTML = content;
-        chatMessages.appendChild(div);
-      });
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-      saveToStorage('chat', chatHistory);
-    }
-
-    function addChatMessage(role, content) {
-      chatHistory.push({role, content});
-      renderChat();
-    }
-
-    // typing indicator
-    function showTyping() {
-      const div = document.createElement('div');
-      div.className = 'chat-msg';
-      div.id = 'typingIndicator';
-      div.innerHTML = `<div class="typing-indicator"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
-      chatMessages.appendChild(div);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-    function removeTyping() {
-      const el = document.getElementById('typingIndicator');
-      if(el) el.remove();
-    }
-
-    // AI response simulation (future ready)
-    function askAI(userMessage) {
-      showTyping();
-      // simulate thinking + response
-      setTimeout(() => {
-        removeTyping();
-        let reply = "✅ आपकी query के आधार पर: ";
-        if (userMessage.toLowerCase().includes('50 lakh')) reply += "Manufacturing loan के लिए PMEGP और CLCSS दोनों options हैं। मैं आपको documents guide कर सकता हूँ।";
-        else if (userMessage.toLowerCase().includes('startup')) reply += "Startup India, SIDBI fund, और MSME grant के विकल्प उपलब्ध।";
-        else if (userMessage.toLowerCase().includes('dairy')) reply += "Dairy farming के लिए NABARD subsidy और animal husbandry loan उपलब्ध।";
-        else if (userMessage.toLowerCase().includes('pmegp')) reply += "PMEGP: 25% से 35% subsidy, max 50 lakh. Eligibility: 18+ years, Udyam registration required.";
-        else reply += "मुझे आपकी बात समझ आई। कृपया थोड़ा और specific बताएं – जैसे business type, amount, या scheme name।";
-        addChatMessage('assistant', reply);
-        // auto scroll handled in render
-      }, 900 + Math.random()*600);
-    }
-
-    function sendMessage() {
-      const text = chatInput.value.trim();
-      if(!text) return;
-      addChatMessage('user', text);
-      chatInput.value = '';
-      askAI(text);
-    }
-
-    sendBtn.addEventListener('click', sendMessage);
-    chatInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') sendMessage(); });
-
-    // suggestion chips
-    suggestionChips.addEventListener('click', (e) => {
-      if(e.target.classList.contains('suggestion-chip')) {
-        const txt = e.target.textContent;
-        chatInput.value = txt;
-        sendMessage();
-      }
-    });
-
-    // clear, new, copy
-    document.getElementById('clearChatBtn').addEventListener('click', ()=>{
-      chatHistory = [];
-      addChatMessage('assistant', '🧹 Chat cleared. नया session शुरू करें।');
-    });
-    document.getElementById('newChatBtn').addEventListener('click', ()=>{
-      chatHistory = [{role:'assistant', content:'✨ नई chat शुरू की गई। कैसे मदद करूँ?'}];
-      renderChat();
-    });
-    document.getElementById('copyLastReplyBtn').addEventListener('click', ()=>{
-      const last = chatHistory.filter(m => m.role === 'assistant').pop();
-      if(last) {
-        navigator.clipboard.writeText(last.content).then(()=>alert('Reply copied!'));
-      }
-    });
-
-    // load chat
-    renderChat();
-
-    // ----- CRM -----
-    function renderCRM() {
-      const tbody = document.getElementById('crmBody');
-      tbody.innerHTML = '';
-      leads.forEach((l, idx) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${l.name}</td><td>${l.business}</td><td>₹${l.amount}L</td><td><span class="status-badge">${l.status}</span></td><td>${l.nextFollowup || '-'}</td>`;
-        tbody.appendChild(tr);
-      });
-      saveToStorage('leads', leads);
-    }
-    renderCRM();
-
-    document.getElementById('addLeadBtn').addEventListener('click', ()=>{
-      const name = prompt('Customer Name?') || 'New Lead';
-      const amt = prompt('Funding Amount (Lakhs)?') || '10';
-      leads.push({name, mobile:'', business:'', requirement:'', amount:amt, status:'New', nextFollowup:'', priority:'', source:''});
-      renderCRM();
-    });
-
-    // ----- ANALYSIS -----
-    document.getElementById('analyzeBtn').addEventListener('click', function(){
-      const busType = document.getElementById('anBusType').value || 'Manufacturing';
-      const age = document.getElementById('anAge').value || 3;
-      const turnover = document.getElementById('anTurnover').value || 80;
-      const gst = document.getElementById('anGst').value;
-      const udyam = document.getElementById('anUdyam').value;
-      const cibil = document.getElementById('anCibil').value || 720;
-      const funding = document.getElementById('anFunding').value || 50;
-
-      const risk = (cibil < 650) ? 'Medium-High' : (cibil < 750 ? 'Medium' : 'Low');
-      const possible = (funding > 0) ? `₹${funding} Lakhs (eligible for MSME)` : '₹50 Lakhs (approx)';
-      const docs = 'ITR, GST, Udyam, Bank statement, KYC';
-      const notes = `Business stable, ${age} years old. GST ${gst}, Udyam ${udyam}. CIBIL ${cibil}. Recommended: PMEGP / CGTMSE.`;
-
-      document.getElementById('anSummary').textContent = `${busType} · ${age} yrs · turnover ₹${turnover}L`;
-      document.getElementById('anRisk').textContent = risk;
-      document.getElementById('anPossible').textContent = possible;
-      document.getElementById('anDocs').textContent = docs;
-      document.getElementById('anNotes').textContent = notes;
-      document.getElementById('analysisResult').classList.remove('hidden');
-    });
-
-    // ----- SCHEMES (expandable) -----
-    function loadSchemes() {
-      const container = document.getElementById('schemesContainer');
-      const schemes = [
-        {name:'PMEGP', desc:'Prime Minister’s Employment Generation Programme', elig:'18+ yrs, Udyam', benefits:'25-35% subsidy', docs:'Project report, KYC, Caste certificate'},
-        {name:'CLCSS', desc:'Credit Linked Capital Subsidy Scheme (textiles)', elig:'MSME, textile', benefits:'15% subsidy', docs:'Project report, KYC'},
-        {name:'MUDRA', desc:'Pradhan Mantri MUDRA Yojana', elig:'Small business', benefits:'Up to 10 lakh', docs:'Business plan, KYC'}
+  init() {
+    this.loadFromStorage();
+    if (this.leads.length === 0) {
+      // Seed with sample data
+      this.leads = [
+        { id: '1', name: 'Rajesh Kumar', mobile: '9876543210', business: 'Food Processing', entity: 'Sole Prop', amount: '25', status: 'Interested', priority: 'High', lastCall: '2025-07-05', nextFollowup: '2025-07-12', scheme: 'PMEGP', loan: 'Business Loan', aiRemark: 'Good fit for PMEGP. Documents pending.', timeline: [{date:'2025-07-01',time:'10:00',type:'Lead Created',note:'Initial inquiry'},{date:'2025-07-05',time:'11:30',type:'Call',note:'Interested in PMEGP'}] },
+        { id: '2', name: 'Priya Sharma', mobile: '9876543211', business: 'Dairy', entity: 'Partnership', amount: '50', status: 'Documents Pending', priority: 'Medium', lastCall: '2025-07-03', nextFollowup: '2025-07-10', scheme: 'NLM', loan: 'Working Capital', aiRemark: 'Dairy project viable. Need land documents.', timeline: [{date:'2025-07-02',time:'09:00',type:'Lead Created',note:'Dairy farming inquiry'},{date:'2025-07-03',time:'14:00',type:'Documents',note:'KYC submitted'}] },
+        { id: '3', name: 'Amit Singh', mobile: '9876543212', business: 'Manufacturing', entity: 'Pvt Ltd', amount: '75', status: 'Approved', priority: 'High', lastCall: '2025-07-06', nextFollowup: '2025-07-15', scheme: 'CGTMSE', loan: 'Term Loan', aiRemark: 'Strong financials. Approved for ₹75L.', timeline: [{date:'2025-06-20',time:'10:00',type:'Lead Created',note:'Manufacturing plant'},{date:'2025-07-06',time:'16:00',type:'Approved',note:'Loan approved'}] },
+        { id: '4', name: 'Sunita Devi', mobile: '9876543213', business: 'Handicraft', entity: 'Sole Prop', amount: '10', status: 'New', priority: 'Low', lastCall: null, nextFollowup: '2025-07-14', scheme: 'PM Vishwakarma', loan: 'MUDRA', aiRemark: 'Eligible for PM Vishwakarma.', timeline: [{date:'2025-07-08',time:'09:00',type:'Lead Created',note:'Handicraft business'}] },
       ];
-      container.innerHTML = schemes.map((s, i) => `
-        <div class="scheme-item">
-          <div class="scheme-header" data-idx="${i}">${s.name} <span>▼</span></div>
-          <div class="scheme-body" id="schemeBody${i}">
-            <strong>Overview</strong><p>${s.desc}</p>
-            <strong>Eligibility</strong><p>${s.elig}</p>
-            <strong>Benefits</strong><p>${s.benefits}</p>
-            <strong>Documents</strong><p>${s.docs}</p>
-            <strong>Consultant Notes</strong><p>इस scheme के लिए DPR और Udyam registration mandatory.</p>
-            <strong>Official Source</strong><p>msme.gov.in</p>
-          </div>
+      this.saveToStorage();
+    }
+    this.chatHistory = [{ role: 'assistant', content: '👋 नमस्ते! मैं Smile AI Consultant हूँ। बताएं किस funding में help चाहिए?' }];
+  },
+
+  loadFromStorage() {
+    try {
+      const leads = localStorage.getItem('smile_leads');
+      if (leads) this.leads = JSON.parse(leads);
+      const chat = localStorage.getItem('smile_chat');
+      if (chat) this.chatHistory = JSON.parse(chat);
+    } catch (e) { console.warn('Storage load error', e); }
+  },
+
+  saveToStorage() {
+    try {
+      localStorage.setItem('smile_leads', JSON.stringify(this.leads));
+      localStorage.setItem('smile_chat', JSON.stringify(this.chatHistory));
+    } catch (e) { console.warn('Storage save error', e); }
+  },
+
+  getLead(id) { return this.leads.find(l => l.id === id); },
+
+  addLead(data) {
+    const id = Date.now().toString();
+    const lead = { id, ...data, timeline: [{date:new Date().toISOString().slice(0,10),time:new Date().toTimeString().slice(0,5),type:'Lead Created',note:'New lead added'}] };
+    this.leads.push(lead);
+    this.saveToStorage();
+    return lead;
+  },
+
+  updateLead(id, updates) {
+    const idx = this.leads.findIndex(l => l.id === id);
+    if (idx === -1) return null;
+    this.leads[idx] = { ...this.leads[idx], ...updates };
+    this.saveToStorage();
+    return this.leads[idx];
+  },
+
+  addTimeline(id, entry) {
+    const lead = this.getLead(id);
+    if (!lead) return;
+    if (!lead.timeline) lead.timeline = [];
+    lead.timeline.push({ date: new Date().toISOString().slice(0,10), time: new Date().toTimeString().slice(0,5), ...entry });
+    this.saveToStorage();
+  },
+};
+
+// ============================================================
+// SCHEMES DATA (embedded fallback, but will use schemes.js if available)
+// ============================================================
+let GOVERNMENT_SCHEMES = [];
+try {
+  if (typeof window !== 'undefined' && window.GOVERNMENT_SCHEMES) {
+    GOVERNMENT_SCHEMES = window.GOVERNMENT_SCHEMES;
+  }
+} catch (e) {}
+
+// Fallback schemes if not loaded
+if (!GOVERNMENT_SCHEMES || GOVERNMENT_SCHEMES.length === 0) {
+  GOVERNMENT_SCHEMES = [
+    { id: 'pmegp', schemeName: 'PMEGP', category: 'MSME', sector: 'Manufacturing, Service', eligibility: '18+ yrs, 8th pass', benefits: '25-45% subsidy', documents: 'KYC, Project Report' },
+    { id: 'mudra', schemeName: 'PM MUDRA Yojana', category: 'MSME', sector: 'All', eligibility: '18+ yrs', benefits: 'Up to ₹10L collateral-free', documents: 'KYC, Business Plan' },
+    { id: 'cgtmse', schemeName: 'CGTMSE', category: 'MSME', sector: 'All', eligibility: 'MSME with viable business', benefits: 'Guarantee cover up to ₹2Cr', documents: 'MSME Registration, ITR' },
+    { id: 'standup', schemeName: 'Stand-Up India', category: 'MSME', sector: 'All', eligibility: 'SC/ST/Women', benefits: '₹10L-1Cr loan', documents: 'Category certificate, Project Report' },
+    { id: 'startup_seed', schemeName: 'Startup India Seed Fund', category: 'Startup', sector: 'Tech, Innovation', eligibility: 'DPIIT recognized', benefits: 'Up to ₹50L grant', documents: 'DPIIT recognition, Business Plan' },
+    { id: 'pmfme', schemeName: 'PMFME', category: 'Food Processing', sector: 'Food Processing', eligibility: 'Micro food enterprises', benefits: 'Seed capital + subsidy', documents: 'FSSAI, Project Report' },
+    { id: 'aif', schemeName: 'Agriculture Infrastructure Fund', category: 'Agriculture', sector: 'Agri-Infrastructure', eligibility: 'Farmers, FPOs', benefits: 'Interest subvention', documents: 'Land documents, Project Report' },
+    { id: 'nlm', schemeName: 'National Livestock Mission', category: 'Agriculture', sector: 'Dairy, Poultry', eligibility: 'Livestock farmers', benefits: '40-50% subsidy', documents: 'Land, Project Report' },
+  ];
+}
+
+// ============================================================
+// LOAN PRODUCTS (embedded fallback)
+// ============================================================
+let LOAN_PRODUCTS = [];
+try {
+  if (typeof window !== 'undefined' && window.LOAN_PRODUCTS) {
+    LOAN_PRODUCTS = window.LOAN_PRODUCTS;
+  }
+} catch (e) {}
+
+if (!LOAN_PRODUCTS || LOAN_PRODUCTS.length === 0) {
+  LOAN_PRODUCTS = [
+    { id: 'bl', name: 'Business Loan', description: 'Unsecured loan for business expansion', interest: '10-14%', tenure: '3-5 years' },
+    { id: 'wc', name: 'Working Capital', description: 'For day-to-day operations', interest: '9-12%', tenure: '1-3 years' },
+    { id: 'msme', name: 'MSME Loan', description: 'For MSME sector', interest: '8-11%', tenure: '5-7 years' },
+    { id: 'machinery', name: 'Machinery Loan', description: 'For purchasing machinery', interest: '9-13%', tenure: '5-7 years' },
+    { id: 'lap', name: 'Loan Against Property', description: 'Secured loan against property', interest: '8-10%', tenure: '10-15 years' },
+    { id: 'startup', name: 'Startup Loan', description: 'For startups with DPIIT recognition', interest: '10-14%', tenure: '3-5 years' },
+    { id: 'cash_credit', name: 'Cash Credit', description: 'Overdraft facility for working capital', interest: '8-12%', tenure: '1 year (renewable)' },
+    { id: 'od', name: 'Overdraft', description: 'Overdraft against current account', interest: '9-13%', tenure: '1 year (renewable)' },
+  ];
+}
+
+// ============================================================
+// UI HELPERS
+// ============================================================
+function $(sel) { return document.querySelector(sel); }
+function $$(sel) { return document.querySelectorAll(sel); }
+
+function showModule(id) {
+  // Hide all modules
+  document.querySelectorAll('[id$="-module"]').forEach(el => el.classList.add('hidden'));
+  const target = document.getElementById(id + '-module');
+  if (target) target.classList.remove('hidden');
+  
+  // Update buttons
+  document.querySelectorAll('.module-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector(`.module-btn[data-module="${id}"]`);
+  if (btn) btn.classList.add('active');
+  
+  // Bottom nav
+  document.querySelectorAll('#bottomNav button').forEach(b => b.classList.remove('active'));
+  const navBtn = document.querySelector(`#bottomNav button[data-module="${id}"]`);
+  if (navBtn) navBtn.classList.add('active');
+  
+  Store.selectedModule = id;
+  
+  // Render content if needed
+  if (id === 'dashboard') renderDashboard();
+  if (id === 'crm') renderCRM();
+  if (id === 'schemes') renderSchemes();
+  if (id === 'loans') renderLoans();
+}
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+
+function renderDashboard() {
+  const total = Store.leads.length;
+  const interested = Store.leads.filter(l => l.status === 'Interested').length;
+  const approved = Store.leads.filter(l => l.status === 'Approved' || l.status === 'Disbursed').length;
+  const pending = Store.leads.filter(l => l.status === 'Documents Pending' || l.status === 'Under Review').length;
+  const followup = Store.leads.filter(l => l.status === 'Follow-up' || l.status === 'New').length;
+  
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statInterested').textContent = interested;
+  document.getElementById('statApproved').textContent = approved;
+  document.getElementById('statPending').textContent = pending;
+  document.getElementById('statFollowup').textContent = followup;
+}
+
+function renderCRM() {
+  const container = document.getElementById('crmList');
+  container.innerHTML = Store.leads.map(lead => `
+    <div class="lead-card" onclick="openProfile('${lead.id}')">
+      <div class="avatar">${lead.name.charAt(0)}</div>
+      <div class="info">
+        <div class="name">${lead.name}</div>
+        <div class="sub">${lead.business} · ₹${lead.amount}L</div>
+        <div class="meta">${lead.mobile || ''} · ${lead.entity || ''}</div>
+      </div>
+      <span class="status-badge ${lead.status.toLowerCase().replace(' ','')}">${lead.status}</span>
+    </div>
+  `).join('');
+}
+
+function renderSchemes() {
+  const container = document.getElementById('schemesContainer');
+  document.getElementById('schemeCount').textContent = GOVERNMENT_SCHEMES.length;
+  container.innerHTML = GOVERNMENT_SCHEMES.map((s, i) => `
+    <div class="scheme-item" style="border:1px solid var(--gray-2);border-radius:var(--radius-sm);margin-bottom:10px;overflow:hidden;">
+      <div class="scheme-header" data-idx="${i}" style="padding:12px 16px;background:#fff;font-weight:600;display:flex;justify-content:space-between;cursor:pointer;font-size:14px;">
+        ${s.schemeName} <span style="color:var(--gray-4);">▼</span>
+      </div>
+      <div class="scheme-body" id="schemeBody${i}" style="padding:0 16px 16px;background:var(--gray-1);font-size:13px;display:none;line-height:1.6;">
+        <p><strong>Category:</strong> ${s.category || 'N/A'}</p>
+        <p><strong>Sector:</strong> ${s.sector || 'N/A'}</p>
+        <p><strong>Eligibility:</strong> ${s.eligibility || s.elig || 'N/A'}</p>
+        <p><strong>Benefits:</strong> ${s.benefits || 'N/A'}</p>
+        <p><strong>Documents:</strong> ${s.documents || s.requiredDocuments || 'N/A'}</p>
+        <p class="text-muted" style="font-size:11px;margin-top:6px;">💡 Subject to latest official guidelines.</p>
+      </div>
+    </div>
+  `).join('');
+  
+  document.querySelectorAll('.scheme-header').forEach(h => {
+    h.addEventListener('click', function() {
+      const idx = this.dataset.idx;
+      const body = document.getElementById('schemeBody'+idx);
+      if (body) body.style.display = body.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+}
+
+function renderLoans() {
+  const container = document.getElementById('loansContainer');
+  container.innerHTML = LOAN_PRODUCTS.map(l => `
+    <div class="loan-card" style="background:#fff;border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:8px;border:1px solid var(--gray-2);">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong>${l.name}</strong>
+        <span class="badge-pill primary">${l.interest || '8-14%'}</span>
+      </div>
+      <p class="text-muted" style="font-size:13px;margin-top:4px;">${l.description || ''}</p>
+      <div class="text-muted" style="font-size:12px;">Tenure: ${l.tenure || '3-7 years'}</div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// CUSTOMER PROFILE
+// ============================================================
+
+let currentProfileLead = null;
+
+function openProfile(id) {
+  const lead = Store.getLead(id);
+  if (!lead) return;
+  currentProfileLead = lead;
+  Store.currentLeadId = id;
+  
+  // Hide CRM, show profile
+  document.getElementById('crm-module').classList.add('hidden');
+  document.getElementById('profile-module').classList.remove('hidden');
+  
+  renderProfile(lead);
+  showProfileTab('overview');
+}
+
+function closeProfile() {
+  document.getElementById('profile-module').classList.add('hidden');
+  document.getElementById('crm-module').classList.remove('hidden');
+  renderCRM();
+  Store.currentLeadId = null;
+}
+
+function renderProfile(lead) {
+  const container = document.getElementById('profileContent');
+  container.innerHTML = `
+    <div class="profile-header">
+      <div class="avatar-lg">${lead.name.charAt(0)}</div>
+      <div class="info">
+        <h2>${lead.name}</h2>
+        <div class="sub">${lead.business} · ${lead.entity || 'N/A'}</div>
+        <div class="flex gap-1" style="margin-top:4px;">
+          <span class="badge-pill primary">${lead.status}</span>
+          <span class="badge-pill ${lead.priority === 'High' ? 'accent' : ''}">${lead.priority || 'Medium'}</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;font-size:13px;">
+      <div><span class="text-muted">Mobile</span><br><strong>${lead.mobile || 'N/A'}</strong></div>
+      <div><span class="text-muted">Funding</span><br><strong>₹${lead.amount || 0}L</strong></div>
+      <div><span class="text-muted">Scheme</span><br><strong>${lead.scheme || 'N/A'}</strong></div>
+      <div><span class="text-muted">Loan</span><br><strong>${lead.loan || 'N/A'}</strong></div>
+      <div><span class="text-muted">Next Follow-up</span><br><strong>${lead.nextFollowup || 'N/A'}</strong></div>
+      <div><span class="text-muted">Last Call</span><br><strong>${lead.lastCall || 'N/A'}</strong></div>
+    </div>
+    <div style="background:var(--gray-1);border-radius:var(--radius-sm);padding:12px;font-size:13px;margin-bottom:8px;">
+      <span class="text-muted">AI Remark</span><br>${lead.aiRemark || 'No AI analysis yet.'}
+    </div>
+  `;
+}
+
+function showProfileTab(tab) {
+  document.querySelectorAll('#profileTabs .tab-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector(`#profileTabs .tab-btn[data-tab="${tab}"]`);
+  if (btn) btn.classList.add('active');
+  
+  const container = document.getElementById('profileTabContent');
+  const lead = currentProfileLead;
+  if (!lead) { container.innerHTML = '<p class="text-muted">No data</p>'; return; }
+  
+  let html = '';
+  switch(tab) {
+    case 'overview':
+      html = `
+        <div style="display:grid;gap:8px;font-size:14px;">
+          <div><strong>Business:</strong> ${lead.business || 'N/A'}</div>
+          <div><strong>Entity:</strong> ${lead.entity || 'N/A'}</div>
+          <div><strong>Funding Need:</strong> ₹${lead.amount || 0}L</div>
+          <div><strong>Status:</strong> ${lead.status}</div>
+          <div><strong>Priority:</strong> ${lead.priority || 'Medium'}</div>
+          <div><strong>Assigned Scheme:</strong> ${lead.scheme || 'N/A'}</div>
+          <div><strong>Assigned Loan:</strong> ${lead.loan || 'N/A'}</div>
+          <div><strong>Next Follow-up:</strong> ${lead.nextFollowup || 'N/A'}</div>
+          <div><strong>Last Call:</strong> ${lead.lastCall || 'N/A'}</div>
+        </div>
+      `;
+      break;
+    case 'timeline':
+      const timeline = lead.timeline || [];
+      html = timeline.length ? timeline.map(t => `
+        <div class="timeline-item">
+          <span class="time">${t.date || ''}</span>
+          <div class="content"><strong>${t.type || ''}</strong> ${t.note || ''}</div>
+        </div>
+      `).join('') : '<p class="text-muted">No timeline entries.</p>';
+      break;
+    case 'notes':
+      html = `<textarea style="width:100%;padding:12px;border:1px solid var(--gray-2);border-radius:var(--radius-sm);min-height:120px;font-family:inherit;font-size:14px;" placeholder="Add notes...">${lead.notes || ''}</textarea>
+      <button class="btn-primary mt-1" onclick="saveNote()">Save Notes</button>`;
+      break;
+    case 'ai':
+      html = `
+        <div style="background:var(--gray-1);border-radius:var(--radius-sm);padding:16px;">
+          <p><strong>Business Summary:</strong> ${lead.business || 'N/A'} with ${lead.amount || 0}L funding need.</p>
+          <p><strong>Risk Level:</strong> ${lead.priority === 'High' ? 'Medium-High' : 'Low-Medium'}</p>
+          <p><strong>Suggested Schemes:</strong> ${lead.scheme || 'PMEGP, MUDRA'}</p>
+          <p><strong>Suggested Loans:</strong> ${lead.loan || 'Business Loan, Working Capital'}</p>
+          <p><strong>Missing Documents:</strong> ${lead.missingDocs || 'ITR, GST, Udyam'}</p>
+          <button class="btn-primary mt-1" onclick="runAIAnalysis()">🔍 Run Full Analysis</button>
+        </div>
+      `;
+      break;
+    case 'documents':
+      html = `
+        <div style="display:grid;gap:6px;font-size:14px;">
+          <div>✅ KYC - Uploaded</div>
+          <div>✅ PAN Card - Uploaded</div>
+          <div>⏳ ITR - Pending</div>
+          <div>⏳ GST - Pending</div>
+          <div>⏳ Udyam - Missing</div>
+          <div>⏳ Bank Statement - Required</div>
+        </div>
+      `;
+      break;
+    case 'schemes':
+      html = GOVERNMENT_SCHEMES.slice(0, 4).map(s => `
+        <div style="padding:8px 12px;border:1px solid var(--gray-2);border-radius:var(--radius-sm);margin-bottom:6px;font-size:13px;">
+          <strong>${s.schemeName}</strong> - ${s.benefits || ''}
         </div>
       `).join('');
-      document.querySelectorAll('.scheme-header').forEach(h => {
-        h.addEventListener('click', function(){
-          const idx = this.dataset.idx;
-          const body = document.getElementById('schemeBody'+idx);
-          if(body) body.classList.toggle('open');
-        });
-      });
-    }
-    loadSchemes();
-
-    // ----- LOAN PRODUCTS -----
-    function loadLoans() {
-      const container = document.getElementById('loansContainer');
-      const loans = ['Business Loan', 'Working Capital', 'MSME Loan', 'Cash Credit', 'OD', 'Machinery Loan', 'LAP', 'Startup Loan'];
-      container.innerHTML = loans.map(l => `
-        <div class="loan-card"><h4>${l}</h4><span class="text-muted">Interest 8.5%–14% · flexible tenure</span></div>
+      break;
+    case 'loans':
+      html = LOAN_PRODUCTS.slice(0, 4).map(l => `
+        <div style="padding:8px 12px;border:1px solid var(--gray-2);border-radius:var(--radius-sm);margin-bottom:6px;font-size:13px;">
+          <strong>${l.name}</strong> - ${l.interest || ''}
+        </div>
       `).join('');
+      break;
+    default: html = '<p class="text-muted">Select a tab</p>';
+  }
+  container.innerHTML = html;
+}
+
+function saveNote() {
+  const textarea = document.querySelector('#profileTabContent textarea');
+  if (textarea && currentProfileLead) {
+    Store.updateLead(currentProfileLead.id, { notes: textarea.value });
+    alert('✅ Notes saved!');
+  }
+}
+
+function runAIAnalysis() {
+  alert('🤖 AI Analysis initiated. Connect to api/chat.js for full analysis.');
+  // In production, this would call the API
+}
+
+// ============================================================
+// CHATBOT
+// ============================================================
+
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendChatBtn');
+
+function renderChat() {
+  chatMessages.innerHTML = Store.chatHistory.map(msg => {
+    const cls = msg.role === 'user' ? 'chat-msg user' : 'chat-msg';
+    let content = msg.content;
+    if (content.includes('```')) {
+      const parts = content.split('```');
+      content = parts.map((p,i) => i%2===1 ? `<div class="code-block">${p}</div>` : p).join('');
     }
-    loadLoans();
+    return `<div class="${cls}">${content}</div>`;
+  }).join('');
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
 
-    // ----- EMI CALCULATOR -----
-    document.getElementById('calcEmiBtn').addEventListener('click', function(){
-      const P = parseFloat(document.getElementById('emiAmount').value) || 5000000;
-      const r = parseFloat(document.getElementById('emiRate').value) / 12 / 100 || 0.00875;
-      const n = parseFloat(document.getElementById('emiTenure').value) || 60;
-      const emi = P * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
-      document.getElementById('emiResult').textContent = `EMI: ₹${Math.round(emi).toLocaleString()}`;
-    });
+function addChatMessage(role, content) {
+  Store.chatHistory.push({ role, content });
+  Store.saveToStorage();
+  renderChat();
+}
 
-    // ----- SUBSIDY CALCULATOR -----
-    document.getElementById('calcSubsidyBtn').addEventListener('click', function(){
-      const cost = parseFloat(document.getElementById('subProject').value) || 10000000;
-      const pct = parseFloat(document.getElementById('subPercent').value) || 30;
-      const subsidy = cost * pct / 100;
-      document.getElementById('subsidyResult').textContent = `Subsidy Amount: ₹${Math.round(subsidy).toLocaleString()}`;
-    });
+function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  addChatMessage('user', text);
+  chatInput.value = '';
+  
+  // Show typing
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'chat-msg';
+  typingDiv.id = 'typingIndicator';
+  typingDiv.innerHTML = `<div class="typing-indicator"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`;
+  chatMessages.appendChild(typingDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  
+  // Simulate AI response (in production, call api/chat.js)
+  setTimeout(() => {
+    const typingEl = document.getElementById('typingIndicator');
+    if (typingEl) typingEl.remove();
+    
+    let reply = generateAIResponse(text);
+    addChatMessage('assistant', reply);
+  }, 800 + Math.random() * 600);
+}
 
-    // ----- GLOBAL SEARCH (unified) -----
-    globalSearch.addEventListener('input', function(){
-      const q = this.value.toLowerCase().trim();
-      // simple: search in schemes, loans, crm
-      const schemes = ['pmegp','clcss','mudra','subsidy','grant','msme'];
-      const loans = ['business loan','working capital','cash credit','od','machinery','lap','startup','overdraft'];
-      const docs = ['itr','gst','udyam','cibil','kyc'];
-      const allKeywords = [...schemes, ...loans, ...docs];
-      if(q.length>1) {
-        const match = allKeywords.filter(k => k.includes(q));
-        if(match.length) alert('🔍 मिले: '+match.join(', ')+'\n(पूरी search integrate होगी)');
-      }
-    });
+function generateAIResponse(query) {
+  const q = query.toLowerCase();
+  if (q.includes('pmegp')) {
+    return `🔍 **PMEGP Scheme Details:**
 
-    // ----- FUTURE READY functions (placeholders) -----
-    window.analyzeCustomer = function(){ console.log('analyzeCustomer called'); };
-    window.askAI = function(){ console.log('askAI called'); };
-    window.saveLead = function(){ console.log('saveLead called'); };
-    window.generateReport = function(){ console.log('generateReport called'); };
-    window.loadSchemes = loadSchemes;
-    window.loadLoans = loadLoans;
+**PMEGP** (Prime Minister's Employment Generation Programme) provides 25-45% subsidy for manufacturing and service enterprises.
 
-    console.log('Smile Financial · AI Funding Consultant Pro · ready');
-  })();
+**Eligibility:** 18+ years, 8th pass, viable project.
+**Benefits:** Capital subsidy up to 35% (rural), 25% (urban).
+**Documents:** KYC, Project Report, Quotations, Land documents.
+
+💡 *Subject to latest official guidelines.*`;
+  }
+  if (q.includes('mudra') || q.includes('loan')) {
+    return `💰 **MUDRA Loan:**
+
+Collateral-free loan up to ₹10 lakh under three categories:
+• Shishu: up to ₹50,000
+• Kishor: up to ₹5 lakh
+• Tarun: up to ₹10 lakh
+
+**Eligibility:** 18+ years, viable business.
+**Documents:** KYC, Business Plan, Bank Statements.
+
+💡 Interest rates vary by bank.`;
+  }
+  if (q.includes('cibil')) {
+    return `📊 **CIBIL Score Guide:**
+
+**Score Range:** 300-900
+• 750+: Excellent ✅
+• 700-749: Good
+• 650-699: Average
+• Below 650: Improvement needed
+
+**Tips to improve:**
+• Pay EMIs on time
+• Keep credit utilization below 30%
+• Check CIBIL report for errors
+
+💡 CIBIL is one factor in loan approval.`;
+  }
+  if (q.includes('startup')) {
+    return `🚀 **Startup Funding Options:**
+
+1. **Startup India Seed Fund:** Up to ₹50L for DPIIT-recognized startups.
+2. **Incubation Scheme:** Co-working + mentorship.
+3. **State Startup Policies:** Vary by state.
+
+**First Step:** Get DPIIT recognition at startupindia.gov.in
+
+💡 *Eligibility subject to DPIIT guidelines.*`;
+  }
+  // Generic response
+  return `📌 **Smile Financial - AI Consultant**
+
+नमस्ते जी! मैं आपकी funding journey में guide कर रहा हूँ।
+
+आपने पूछा: "${query}"
+
+मैं इन topics में help कर सकता हूँ:
+• Government Schemes (PMEGP, MUDRA, CGTMSE, etc.)
+• Loan Products (Business Loan, Working Capital, etc.)
+• Eligibility & Document Checklist
+• CIBIL and Financial Analysis
+
+कृपया अपना business type और funding amount बताएं ताकि मैं specific guidance दे सकूँ।
+
+💡 *रिमाइंडर: मैं AI हूँ। Final approvals lender और government departments पर depend karti hain.*`;
+}
+
+// Chat event listeners
+sendBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+document.getElementById('clearChatBtn').addEventListener('click', () => {
+  Store.chatHistory = [];
+  addChatMessage('assistant', '🧹 Chat cleared. नया session शुरू करें।');
+});
+
+document.getElementById('newChatBtn').addEventListener('click', () => {
+  Store.chatHistory = [{ role: 'assistant', content: '✨ नई chat शुरू की गई। कैसे मदद करूँ?' }];
+  renderChat();
+});
+
+document.getElementById('copyLastReplyBtn').addEventListener('click', () => {
+  const last = Store.chatHistory.filter(m => m.role === 'assistant').pop();
+  if (last) {
+    navigator.clipboard.writeText(last.content).then(() => alert('✅ Reply copied!'));
+  }
+});
+
+// Suggestion chips
+document.getElementById('suggestionChips').addEventListener('click', (e) => {
+  if (e.target.classList.contains('suggestion-chip')) {
+    chatInput.value = e.target.textContent;
+    sendMessage();
+  }
+});
+
+// ============================================================
+// OTHER CALCULATORS
+// ============================================================
+
+// EMI
+document.getElementById('calcEmiBtn').addEventListener('click', function() {
+  const P = parseFloat(document.getElementById('emiAmount').value) || 5000000;
+  const r = parseFloat(document.getElementById('emiRate').value) / 12 / 100 || 0.00875;
+  const n = parseFloat(document.getElementById('emiTenure').value) || 60;
+  const emi = P * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
+  document.getElementById('emiResult').textContent = `EMI: ₹${Math.round(emi).toLocaleString()}`;
+});
+
+// Subsidy
+document.getElementById('calcSubsidyBtn').addEventListener('click', function() {
+  const cost = parseFloat(document.getElementById('subProject').value) || 10000000;
+  const pct = parseFloat(document.getElementById('subPercent').value) || 30;
+  document.getElementById('subsidyResult').textContent = `Subsidy: ₹${Math.round(cost * pct / 100).toLocaleString()}`;
+});
+
+// ============================================================
+// ANALYSIS
+// ============================================================
+
+document.getElementById('analyzeBtn').addEventListener('click', function() {
+  const busType = document.getElementById('anBusType').value || 'Manufacturing';
+  const age = document.getElementById('anAge').value || 3;
+  const turnover = document.getElementById('anTurnover').value || 80;
+  const cibil = document.getElementById('anCibil').value || 720;
+  const funding = document.getElementById('anFunding').value || 50;
+  const gst = document.getElementById('anGst').value;
+  const udyam = document.getElementById('anUdyam').value;
+  
+  const risk = cibil < 650 ? 'Medium-High' : cibil < 750 ? 'Medium' : 'Low';
+  const docs = 'ITR, GST, Udyam, Bank Statement, KYC';
+  const schemes = 'PMEGP, MUDRA, CGTMSE';
+  const loans = 'Business Loan, Working Capital';
+  
+  const html = `
+    <p><strong>Business Summary:</strong> ${busType} · ${age} yrs · ₹${turnover}L turnover</p>
+    <p><strong>Risk Level:</strong> ${risk}</p>
+    <p><strong>Possible Funding:</strong> ₹${funding}L</p>
+    <p><strong>Government Schemes:</strong> ${schemes}</p>
+    <p><strong>Loan Products:</strong> ${loans}</p>
+    <p><strong>Documents:</strong> ${docs}</p>
+    <p><strong>Consultant Notes:</strong> GST ${gst}, Udyam ${udyam}. CIBIL ${cibil}. Recommended: Apply for PMEGP.</p>
+  `;
+  document.getElementById('analysisResult').classList.remove('hidden');
+  document.getElementById('analysisContent').innerHTML = html;
+});
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+
+// Module buttons
+document.querySelectorAll('.module-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const mod = this.dataset.module;
+    if (mod) showModule(mod);
+  });
+});
+
+// Bottom nav
+document.querySelectorAll('#bottomNav button').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const mod = this.dataset.module;
+    if (mod) showModule(mod);
+  });
+});
+
+// Back to CRM
+document.getElementById('backToCrmBtn').addEventListener('click', closeProfile);
+
+// Print profile
+document.getElementById('printProfileBtn').addEventListener('click', function() {
+  window.print();
+});
+
+// Add lead
+document.getElementById('addLeadBtn').addEventListener('click', function() {
+  const name = prompt('Customer Name?') || 'New Lead';
+  const business = prompt('Business Type?') || 'Business';
+  const amount = prompt('Funding Amount (Lakhs)?') || '10';
+  Store.addLead({ name, business, amount, status: 'New', priority: 'Medium', mobile: '', entity: '', scheme: '', loan: '', aiRemark: 'New lead added.' });
+  renderCRM();
+});
+
+// ============================================================
+// SEARCH
+// ============================================================
+
+document.getElementById('globalSearch').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  if (q.length < 2) return;
+  
+  // Search in leads
+  const leadsMatch = Store.leads.filter(l => 
+    l.name.toLowerCase().includes(q) || 
+    l.business.toLowerCase().includes(q) ||
+    l.mobile?.includes(q)
+  );
+  
+  // Search in schemes
+  const schemesMatch = GOVERNMENT_SCHEMES.filter(s => 
+    s.schemeName.toLowerCase().includes(q) ||
+    s.category?.toLowerCase().includes(q) ||
+    s.sector?.toLowerCase().includes(q)
+  );
+  
+  // Search in loans
+  const loansMatch = LOAN_PRODUCTS.filter(l => 
+    l.name.toLowerCase().includes(q) ||
+    l.description?.toLowerCase().includes(q)
+  );
+  
+  let results = [];
+  if (leadsMatch.length) results.push(`📇 Leads: ${leadsMatch.map(l => l.name).join(', ')}`);
+  if (schemesMatch.length) results.push(`🏛️ Schemes: ${schemesMatch.map(s => s.schemeName).join(', ')}`);
+  if (loansMatch.length) results.push(`💰 Loans: ${loansMatch.map(l => l.name).join(', ')}`);
+  
+  if (results.length) {
+    // Show in a subtle way
+    const searchResult = document.createElement('div');
+    searchResult.id = 'searchResult';
+    searchResult.style.cssText = 'background:var(--gray-1);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;font-size:13px;';
+    searchResult.innerHTML = results.join('<br>');
+    const existing = document.getElementById('searchResult');
+    if (existing) existing.remove();
+    document.querySelector('.search-bar').after(searchResult);
+  }
+});
+
+// ============================================================
+// SIDEBAR
+// ============================================================
+
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('open');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+
+// Sidebar nav items
+document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+  item.addEventListener('click', function() {
+    const text = this.textContent.trim();
+    const map = {
+      'Dashboard': 'dashboard',
+      'AI Chat': 'chat',
+      'CRM': 'crm',
+      'Analysis': 'analysis',
+      'Schemes': 'schemes',
+      'Loans': 'loans',
+      'EMI': 'emi',
+      'Subsidy': 'subsidy',
+      'DPR': 'dpr',
+      'Timeline': 'timeline',
+      'Report': 'report',
+      'Training': 'training',
+    };
+    const mod = map[text];
+    if (mod) {
+      showModule(mod);
+      closeSidebar();
+    }
+  });
+});
+
+// ============================================================
+// INIT
+// ============================================================
+
+Store.init();
+renderDashboard();
+renderCRM();
+renderSchemes();
+renderLoans();
+renderChat();
+
+// Show dashboard by default
+showModule('dashboard');
+
+console.log('✅ Smile Financial · AI Funding Consultant Pro loaded.');
+console.log(`📊 ${Store.leads.length} leads, ${GOVERNMENT_SCHEMES.length} schemes, ${LOAN_PRODUCTS.length} loans.`);
 </script>
 </body>
 </html>
